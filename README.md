@@ -14,8 +14,8 @@ Installation
 --------------
 Clone the repository:
 
-git clone <repository-url>
-cd <repository-folder>
+git clone [<repository-url>](https://github.com/lawrencekm/fbi-wanted)
+cd [<repository-folder>]fbi-wanted
 
 Frontend Setup (React.js):
 -------------------------
@@ -42,9 +42,8 @@ npm run dev
 =============
 Clone the repository and navigate to the project directory
 
-
-git clone <repository-url>
-cd <repository-folder>
+git clone [<repository-url>](https://github.com/lawrencekm/fbi-wanted)
+cd <repository-folder>fbi-wanted
 
 docker-compose up -d
 

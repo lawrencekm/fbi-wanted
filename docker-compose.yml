@@ -13,7 +13,7 @@ services:
       - mongo
     volumes:
       - ./server:/usr/src/app
-      - /usr/src/app/node_modules
+      #- /usr/src/app/node_modules
     networks:
       - wanted-network
 
@@ -23,7 +23,10 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "8092:80"
+      #- "8092:80" if nginx proxy is used
+      - "8092:3000"  # Match Next.js default port
+    environment:
+      - NEXTAUTH_SECRET=b31d032cfdcf47a399990a71e43c5d2a
     depends_on:
       - backend
     networks:
