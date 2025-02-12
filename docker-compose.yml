@@ -9,8 +9,11 @@ services:
     environment:
       - PORT=3001      
       - MONGO_URI=mongodb://mongo:27017/wanted-db
-    depends_on:
-      - mongo
+      - FRONTEND_DOMAIN=http://frontend:8092
+      - FBI_WANTED_API_URL=https://api.fbi.gov/wanted/v1/list
+      - FBI_WANTED_API_UID_URL=https://api.fbi.gov/@wanted-person
+      - FRONTEND_DOMAIN_TWO=http://localhost:3000
+
     volumes:
       - ./server:/usr/src/app
       #- /usr/src/app/node_modules
@@ -27,24 +30,12 @@ services:
       - "8092:3000"  # Match Next.js default port
     environment:
       - NEXTAUTH_SECRET=b31d032cfdcf47a399990a71e43c5d2a
+      - REACT_APP_API_BASE_URL=http://localhost:3001/api
     depends_on:
       - backend
-    networks:
-      - wanted-network
-
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
     networks:
       - wanted-network
 
 networks:
   wanted-network:
     driver: bridge
-
-volumes:
-  mongo-data:
