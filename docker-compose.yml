@@ -1,0 +1,47 @@
+services:
+  backend:
+    container_name: react-node-backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001      
+      - MONGO_URI=mongodb://mongo:27017/wanted-db
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - wanted-network
+
+  frontend:
+    container_name: react-node-frontend
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "8092:80"
+    depends_on:
+      - backend
+    networks:
+      - wanted-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - wanted-network
+
+networks:
+  wanted-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
