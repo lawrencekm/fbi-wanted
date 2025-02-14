@@ -20,7 +20,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
-
   const [filter, setFilter] = useState({
     hairColor: "",
     eyeColor: "",
@@ -40,7 +39,6 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchMostWanted = async () => {
       try {
-        //const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || window.location.origin;
         const response = await axios.get(process.env.NEXT_PUBLIC_API_BASE_URL + "/wanted", {
         params: { page },
         headers: {
@@ -68,7 +66,7 @@ export default function Dashboard() {
     } else {
       fetchMostWanted();
     }
-  }, [status, router, page]);
+  }, [status, router, page]); //filter
 
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);

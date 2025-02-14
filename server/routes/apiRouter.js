@@ -17,6 +17,11 @@ const FBI_WANTED_API_UID_URL = process.env['FBI_WANTED_API_UID_URL'];
 // Route to fetch wanted persons with search criteria and pagination
 apiRouter.get("/api/wanted", async (req, res) => {
   try {
+    const cacheKey = `wanted_${JSON.stringify(req.query)}`;
+    const cachedData = getFromCache(cacheKey);
+    if (cachedData) {
+      return res.json({ success: true, data: cachedData, cached: true });
+    }
     // Extract query parameters for search criteria and pagination
     const { sex, age_min, age_max, nationality, page = 1, limit = 10 } = req.query;
 
@@ -49,17 +54,21 @@ apiRouter.get("/api/wanted", async (req, res) => {
     // Calculate pagination metadata
     const totalPages = Math.ceil(total / limit);
 
+        const result = {
+          success: true,
+          data: items,
+          pagination: {
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(total / limit),
+            totalItems: total,
+            itemsPerPage: parseInt(limit, 10),
+          },
+        };
+        //update cache
+        //setCache(cacheKey, result);
+
     // Return the paginated response
-    res.json({
-      success: true,
-      data: items,
-      pagination: {
-        currentPage: parseInt(page, 10),
-        totalPages,
-        totalItems: total,
-        itemsPerPage: parseInt(limit, 10),
-      },
-    });
+    res.json(result);
   } catch (error) {
     console.error("Error fetching wanted persons:", error.message);
     res.status(500).json({ success: false, error: "Failed to fetch data from the FBI API" });
@@ -86,6 +95,26 @@ apiRouter.get("/api/wanted/:uid", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch data from the FBI API" });
   }
 });
+
+
+
+// Simple in-memory cache
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // xpires after 5 minutes
+
+const getFromCache = (key) => {
+  const cachedData = cache.get(key);
+  if (!cachedData) return null;
+  if (Date.now() > cachedData.expiry) {
+    cache.delete(key);
+    return null;
+  }
+  return cachedData.data;
+};
+
+const setCache = (key, data) => {
+  cache.set(key, { data, expiry: Date.now() + CACHE_TTL });
+};
 
 
 export default apiRouter;

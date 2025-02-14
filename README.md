@@ -1,4 +1,4 @@
-# Full-Stack Application - React.js + Node.js + Docker
+# Full-Stack FBI Most Wanted Application - React.js + Node.js + Docker
 
 ## Overview
 This project consists of a React.js frontend and a Node.js backend, all containerized using Docker. The app fetches data from the FBI Wanted API and presents it in a user-friendly interface. The landing page shows a few wanted persons, and upon signing in, more wanted persons are displayed with search and filter options. The app also supports loading more paginated data.
@@ -29,6 +29,7 @@ Navigate to the client folder and install the required dependencies:
 Start the Frontend
     npm start or npm run dev
 The frontend will now be running on http://localhost:3000.
+
 
 #### Backend Setup (Node.js)
 Navigate to the server folder and install the required dependencies:

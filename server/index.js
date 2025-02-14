@@ -25,6 +25,7 @@ app.use(cors({
   credentials: true,
 }));
 console.log('FRONTEND_DOMAIN', process.env['FRONTEND_DOMAIN']);
+
 app.use("/", apiRouter);
 
 
